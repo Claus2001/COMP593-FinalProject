@@ -16,10 +16,14 @@ History:
   Date        Author    Description
   2022-03-11  J.Dalby   Initial creation
 """
+from email.mime import image
 from sys import argv, exit
 from datetime import datetime, date
 from hashlib import sha256
 from os import path
+
+
+from requests import request
 
 def main():
 
@@ -37,9 +41,9 @@ def main():
     apod_info_dict = get_apod_info(apod_date)
     
     # Download today's APOD
-    image_url = "TODO"
+    image_url = download_apod_image(apod_info_dict)
     image_msg = download_apod_image(image_url)
-    image_sha256 = "TODO"
+    image_sha256 = #todo
     image_size = -1 # TODO
     image_path = get_image_path(image_url, image_dir_path)
 
@@ -106,7 +110,7 @@ def get_image_path(image_url, dir_path):
     :param dir_path: Path of directory in which image is saved locally
     :returns: Path at which image is saved locally
     """
-    return "TODO"
+    
 
 def get_apod_info(date):
     """
@@ -137,7 +141,17 @@ def download_apod_image(image_url):
     :param image_url: URL of image
     :returns: Response message that contains image data
     """
-    return "TODO"
+    image = (image_url['url'])
+    image_info = request.get(image)
+
+    if image_info.status.code == 200: 
+        print('Response:',image_info.status_code, '🎉🎉🎉', '\n')
+        print("Success connection")
+        return image
+
+    else:
+        print('failed to download photo',image_info.status_code)
+        return None
 
 def save_image_file(image_msg, image_path):
     """
@@ -157,7 +171,11 @@ def create_image_db(db_path):
     :param db_path: Path of .db file
     :returns: None
     """
-    return #TODO
+
+
+
+    
+    
 
 def add_image_to_db(db_path, image_path, image_size, image_sha256):
     """

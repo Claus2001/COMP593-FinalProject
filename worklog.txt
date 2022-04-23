@@ -1,0 +1,2 @@
+4/23/2022
+understanding the code and the libraries i have to install, i worked on what i know so far which is making sure it connects to the site. im also going to try and figure out how to create the db if it doesnt already exits
