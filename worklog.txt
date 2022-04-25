@@ -7,3 +7,4 @@ Going to start with the get_image_path, I just relalized I couldve started wiht 
 Going nice and smooth so far 
 had problems with saving the file, messed around for 20 min and i think i need to get the raw response this helped me. https://stackoverflow.com/questions/16923898/how-to-get-the-raw-content-of-a-response-in-requests-with-python.
 Going to stop for today.
+Came back to it, started running the script and trouble shooting the mistakes currecntly stuck on download_apod_image as my pictures varibales is saying it must be a integers even tho its a string

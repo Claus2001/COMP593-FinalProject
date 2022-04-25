@@ -16,10 +16,7 @@ History:
   Date        Author    Description
   2022-03-11  J.Dalby   Initial creation
 """
-from curses import curs_set
-from email.mime import image
-from genericpath import exists
-from multiprocessing import connection
+
 import sqlite3
 from sys import argv, exit
 from datetime import datetime, date
@@ -55,7 +52,8 @@ def main():
     # Download today's APOD
     image_url = download_apod_image(apod_info_dict)
     image_msg = download_apod_image(image_url)
-    image_sha256 = #todo
+    h = hashlib.sha256(image_url.encode())
+    image_sha256 = str(h.digest())
     image_size = os.path.getsize(image_path)
     image_path = get_image_path(image_url, image_dir_path)
 
@@ -143,7 +141,7 @@ def get_apod_info(date):
 
     parameters = (nasa_api + my_key + "&date=" + str(date))
       
-    response = request.get(parameters)
+    response = requests.get(parameters)
 
     if response.status_code == 200:
         
@@ -182,16 +180,16 @@ def download_apod_image(image_url):
     :param image_url: URL of image
     :returns: Response message that contains image data
     """
-    image = (image_url['url'])
-    image_info = request.get(image)
+    picture = image_url['url']
+    pic_info = requests.get(picture)
 
-    if image_info.status.code == 200: 
-        print('Response:',image_info.status_code, '🎉🎉🎉', '\n')
+    if pic_info.status_code == 200: 
+        print('Response:',pic_info.status_code, '🎉🎉🎉', '\n')
         print("Success connection")
-        return image
+        return picture
 
     else:
-        print('Failed to download APOD',image_info.status_code)
+        print('Failed to download APOD',pic_info.status_code)
         return None
 
 def save_image_file(image_msg, image_path):
@@ -260,7 +258,7 @@ def add_image_to_db(db_path, image_path, image_size, image_sha256):
 
     connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
-    cursor.execute("INSERT INTO 'NASA APOD' (image_path, image_url, image_size, image_sha256) VALUE (?,?,?,?"), (db_path, image_path, image_size, image_sha256))
+    cursor.execute("INSERT INTO 'NASA APOD' (image_path, image_url, image_size, image_sha256) VALUE (?,?,?,?"), (db_path, image_path, image_size, image_sha256)
     connection.commit()
     connection.commit()
 
@@ -278,10 +276,10 @@ def image_already_in_db(db_path, image_sha256):
     cursor = connection.cursor()
     cursor.execute("SELECT image_sha56 FROM 'NASA APOD'")
     get_hash = cursor.fetchall()
-        if image_sha256 in get_hash:
-            return True
-        else: 
-            return: False
+    if image_sha256 in get_hash:
+        return True
+    else: 
+        return False
 
 def set_desktop_background_image(image_path):
     """
