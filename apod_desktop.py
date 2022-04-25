@@ -30,10 +30,12 @@ from os.path import exists
 import ctypes
 from pprint import pprint
 import hashlib
+from urllib import response
 
 
 
 from requests import request
+import requests
 
 def main():
 
@@ -120,7 +122,12 @@ def get_image_path(image_url, dir_path):
     :param dir_path: Path of directory in which image is saved locally
     :returns: Path at which image is saved locally
     """
-    
+    URL = image_url
+    get_filename = URL.split("/")[-1]
+    location = dir_path
+    full_path = os.path.join(location,get_filename)
+    print(full_path)
+    return location
 
 def get_apod_info(date):
     """
@@ -130,7 +137,28 @@ def get_apod_info(date):
     :param date: APOD date formatted as YYYY-MM-DD
     :returns: Dictionary of APOD info
     """    
-    return {"todo" : "TODO"}
+    nasa_api = 'https://api.nasa.gov/planetary/apod?api_key='
+    my_key = 'NQPZ8KD9a3Cx6p8cIKx8sQGwsh1v1x6F3h7MBAIc'
+    print("Getting APOD information... ")
+
+    parameters = (nasa_api + my_key + "&date=" + str(date))
+      
+    response = request.get(parameters)
+
+    if response.status_code == 200:
+        
+        print('Response:',response.status_code, '🎉🎉🎉', '\n')
+        print("Success APOD Obtained")
+        info =response.json()
+        info_dict= dict(info)
+        
+        return info_dict
+        
+    else:
+        print('Failed. Response code:',response.status_code)
+        return None
+
+    
 
 def print_apod_info(image_url, image_path, image_size, image_sha256):
     """
@@ -142,7 +170,10 @@ def print_apod_info(image_url, image_path, image_size, image_sha256):
     :param image_sha256: SHA-256 of image
     :returns: None
     """    
-    return #TODO
+    print("The URL of the APOD is " + image_url)
+    print("The full path of the APOD is " + image_path)
+    print("The APOD size is ", image_size, " KB" )
+    print("The Hash for the file is ", image_sha256)
 
 def download_apod_image(image_url):
     """
@@ -160,7 +191,7 @@ def download_apod_image(image_url):
         return image
 
     else:
-        print('failed to download photo',image_info.status_code)
+        print('Failed to download APOD',image_info.status_code)
         return None
 
 def save_image_file(image_msg, image_path):
@@ -172,7 +203,23 @@ def save_image_file(image_msg, image_path):
     :param image_path: Path to save image file
     :returns: None
     """
-    return #TODO
+    URL = image_msg
+    req = requests.get(URL)
+
+    if req.status_code == 200:
+        print('Response:',req.status_code, '🎉🎉🎉', '\n')
+        print("Save Succesfull")
+             
+    else:
+        print('Failed to download APOD',req.status_code)
+
+    get_filename = URL.split("/")[-1]
+    location = image_path
+    full_path = os.path.join(location,get_filename)
+
+    
+
+    
 
 def create_image_db(db_path):
     """
@@ -189,7 +236,7 @@ def create_image_db(db_path):
         db_path = sqlite3.connect(file_path)
         cursor = db_path.cursor()
 
-        cursor.execute(""" CREATE TABLE "NASA POTD"(
+        cursor.execute(""" CREATE TABLE "NASA APOD"(
             image path text,
             image_url text,
             image_size integer
@@ -213,7 +260,7 @@ def add_image_to_db(db_path, image_path, image_size, image_sha256):
 
     connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
-    cursor.execute("INSERT INTO 'NASA POTD' (image_path, image_url, image_size, image_sha256) VALUE (?,?,?,?", (db_path, image_path, image_size, image_sha256))
+    cursor.execute("INSERT INTO 'NASA APOD' (image_path, image_url, image_size, image_sha256) VALUE (?,?,?,?"), (db_path, image_path, image_size, image_sha256))
     connection.commit()
     connection.commit()
 
@@ -229,9 +276,9 @@ def image_already_in_db(db_path, image_sha256):
     """ 
     connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
-    cursor.execute("SELECT image_sha56 FROM 'NASA POTD'")
-    get_sha = cursor.fetchall()
-        if image_sha256 in get_sha:
+    cursor.execute("SELECT image_sha56 FROM 'NASA APOD'")
+    get_hash = cursor.fetchall()
+        if image_sha256 in get_hash:
             return True
         else: 
             return: False
