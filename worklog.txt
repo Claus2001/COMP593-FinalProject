@@ -12,3 +12,4 @@ Going to stop for today.
 Came back to it, started running the script  for the first time and trouble shooting the mistakes currecntly stuck on download_apod_image as my pictures varibales is saying it must be a integers even tho its a string
 4/25/2022
 tired messing around havent gotten it yet
+using https://cp.elitegameservers.net/Login?ReturnUrl=%2fService%2fHome%2f11678 to make the path where the files reside

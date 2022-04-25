@@ -25,7 +25,6 @@ import os.path
 from os import path
 from os.path import exists
 import ctypes
-from pprint import pprint
 import hashlib
 from urllib import response
 
@@ -182,12 +181,11 @@ def download_apod_image(image_url):
     :param image_url: URL of image
     :returns: Response message that contains image data
     """
-    picture = image_url['url']
-    pic_info = requests.get(picture)
+    pic_info = requests.get(image_url)
     if pic_info.status_code == 200: 
         print('Response:',pic_info.status_code, '🎉🎉🎉', '\n')
         print("Success connection")
-        return picture
+        return pic_info
 
     else:
         print('Failed to download APOD',pic_info.status_code)
