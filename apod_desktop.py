@@ -16,11 +16,21 @@ History:
   Date        Author    Description
   2022-03-11  J.Dalby   Initial creation
 """
+from curses import curs_set
 from email.mime import image
+from genericpath import exists
+from multiprocessing import connection
+import sqlite3
 from sys import argv, exit
 from datetime import datetime, date
 from hashlib import sha256
+import os.path
 from os import path
+from os.path import exists
+import ctypes
+from pprint import pprint
+import hashlib
+
 
 
 from requests import request
@@ -44,7 +54,7 @@ def main():
     image_url = download_apod_image(apod_info_dict)
     image_msg = download_apod_image(image_url)
     image_sha256 = #todo
-    image_size = -1 # TODO
+    image_size = os.path.getsize(image_path)
     image_path = get_image_path(image_url, image_dir_path)
 
     # Print APOD image information
@@ -172,9 +182,22 @@ def create_image_db(db_path):
     :returns: None
     """
 
+    file_path = db_path
 
+    file_exist = exists(file_path)
+    if file_exist == False:
+        db_path = sqlite3.connect(file_path)
+        cursor = db_path.cursor()
 
-    
+        cursor.execute(""" CREATE TABLE "NASA POTD"(
+            image path text,
+            image_url text,
+            image_size integer
+            image_sha256 text
+        )
+        """) 
+        db_path.commit()
+        db_path.close()
     
 
 def add_image_to_db(db_path, image_path, image_size, image_sha256):
@@ -187,7 +210,13 @@ def add_image_to_db(db_path, image_path, image_size, image_sha256):
     :param image_sha256: SHA-256 of image
     :returns: None
     """
-    return #TODO
+
+    connection = sqlite3.connect(db_path)
+    cursor = connection.cursor()
+    cursor.execute("INSERT INTO 'NASA POTD' (image_path, image_url, image_size, image_sha256) VALUE (?,?,?,?", (db_path, image_path, image_size, image_sha256))
+    connection.commit()
+    connection.commit()
+
 
 def image_already_in_db(db_path, image_sha256):
     """
@@ -198,7 +227,14 @@ def image_already_in_db(db_path, image_sha256):
     :param image_sha256: SHA-256 of image
     :returns: True if image is already in DB; False otherwise
     """ 
-    return True #TODO
+    connection = sqlite3.connect(db_path)
+    cursor = connection.cursor()
+    cursor.execute("SELECT image_sha56 FROM 'NASA POTD'")
+    get_sha = cursor.fetchall()
+        if image_sha256 in get_sha:
+            return True
+        else: 
+            return: False
 
 def set_desktop_background_image(image_path):
     """
@@ -207,6 +243,6 @@ def set_desktop_background_image(image_path):
     :param image_path: Path of image file
     :returns: None
     """
-    return #TODO
+
 
 main()

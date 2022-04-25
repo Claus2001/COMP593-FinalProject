@@ -1,2 +1,5 @@
 4/23/2022
-understanding the code and the libraries i have to install, i worked on what i know so far which is making sure it connects to the site. im also going to try and figure out how to create the db if it doesnt already exits
+understanding the code and the libraries i have to install, i worked on what i know so far which is making sure it connects to the site. im also going to try and figure out how to create the db if it doesnt already exits, had troubles figuring out, looked back to previous labs for solutions. 
+4/24/2022
+Figured out how to create database, with some help from https://pynative.com/python-cursor-fetchall-fetchmany-fetchone-to-read-rows-from-table/, struggles with the hash, this helped https://www.quickprogrammingtips.com/python/how-to-calculate-sha256-hash-of-a-file-in-python.html, also this https://docs.python.org/3/library/hashlib.html.
+Finished the database
