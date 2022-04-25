@@ -139,7 +139,7 @@ def get_apod_info(date):
     my_key = 'NQPZ8KD9a3Cx6p8cIKx8sQGwsh1v1x6F3h7MBAIc'
     print("Getting APOD information... ")
 
-    parameters = (nasa_api + my_key + "&date=" + str(date))
+    parameters = (nasa_api + my_key + "&date=" + date)
       
     response = requests.get(parameters)
 
