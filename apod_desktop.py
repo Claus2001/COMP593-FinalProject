@@ -66,7 +66,9 @@ def main():
         add_image_to_db(db_path, image_path, image_size, image_sha256)
 
     # Set the desktop background image to the selected APOD
-    set_desktop_background_image(image_path)
+    get_filename = image_url.split("/")[-1]
+    wallpaper = os.path.join(image_path,get_filename)
+    set_desktop_background_image(wallpaper)
 
 def get_image_dir_path():
     """
@@ -120,8 +122,8 @@ def get_image_path(image_url, dir_path):
     :param dir_path: Path of directory in which image is saved locally
     :returns: Path at which image is saved locally
     """
-    URL = image_url
-    get_filename = URL.split("/")[-1]
+    
+    get_filename = image_url.split("/")[-1]
     location = dir_path
     full_path = os.path.join(location,get_filename)
     print(full_path)
@@ -180,9 +182,8 @@ def download_apod_image(image_url):
     :param image_url: URL of image
     :returns: Response message that contains image data
     """
-    picture = (image_url['url'])
+    picture = image_url['url']
     pic_info = requests.get(picture)
-
     if pic_info.status_code == 200: 
         print('Response:',pic_info.status_code, '🎉🎉🎉', '\n')
         print("Success connection")
@@ -201,8 +202,8 @@ def save_image_file(image_msg, image_path):
     :param image_path: Path to save image file
     :returns: None
     """
-    URL = image_msg
-    req = requests.get(URL)
+
+    req = requests.get(image_msg)
 
     if req.status_code == 200:
         print('Response:',req.status_code, '🎉🎉🎉', '\n')
@@ -211,7 +212,7 @@ def save_image_file(image_msg, image_path):
     else:
         print('Failed to download APOD',req.status_code)
 
-    get_filename = URL.split("/")[-1]
+    get_filename = image_msg.split("/")[-1]
     location = image_path
     full_path = os.path.join(location,get_filename)
 

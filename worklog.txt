@@ -10,3 +10,5 @@ lab 9 was useful for download_apod_image
 had problems with the hash but i came across this which helped a lot https://www.programiz.com/python-programming/examples/hash-file#:~:text=Source%20Code%20to%20Find%20Hash&text=Hash%20functions%20are%20available%20in,and%20update%20the%20hashing%20function.
 Going to stop for today.
 Came back to it, started running the script  for the first time and trouble shooting the mistakes currecntly stuck on download_apod_image as my pictures varibales is saying it must be a integers even tho its a string
+4/25/2022
+tired messing around havent gotten it yet
