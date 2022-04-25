@@ -180,7 +180,7 @@ def download_apod_image(image_url):
     :param image_url: URL of image
     :returns: Response message that contains image data
     """
-    picture = image_url['url']
+    picture = (image_url['url'])
     pic_info = requests.get(picture)
 
     if pic_info.status_code == 200: 

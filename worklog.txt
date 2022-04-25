@@ -5,6 +5,6 @@ Figured out how to create database, with some help from https://pynative.com/pyt
 Finished the database, not sure if database is gonna work at all as i havent been able to run the code.
 Going to start with the get_image_path, I just relalized I couldve started wiht making the connections so im going to do that now
 Going nice and smooth so far 
-had problems with saving the file, messed around for 20 min and i think i need to get the raw response this helped me. https://stackoverflow.com/questions/16923898/how-to-get-the-raw-content-of-a-response-in-requests-with-python.
+had problems with the hash but i came across this which helped a lot https://www.programiz.com/python-programming/examples/hash-file#:~:text=Source%20Code%20to%20Find%20Hash&text=Hash%20functions%20are%20available%20in,and%20update%20the%20hashing%20function.
 Going to stop for today.
 Came back to it, started running the script and trouble shooting the mistakes currecntly stuck on download_apod_image as my pictures varibales is saying it must be a integers even tho its a string
