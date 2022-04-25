@@ -5,4 +5,5 @@ Figured out how to create database, with some help from https://pynative.com/pyt
 Finished the database, not sure if database is gonna work at all as i havent been able to run the code.
 Going to start with the get_image_path, I just relalized I couldve started wiht making the connections so im going to do that now
 Going nice and smooth so far 
-had problems with saving the file, messed around for 20 min and i think i need to get the raw response this helped me. https://stackoverflow.com/questions/16923898/how-to-get-the-raw-content-of-a-response-in-requests-with-python
+had problems with saving the file, messed around for 20 min and i think i need to get the raw response this helped me. https://stackoverflow.com/questions/16923898/how-to-get-the-raw-content-of-a-response-in-requests-with-python.
+Going to stop for today.
