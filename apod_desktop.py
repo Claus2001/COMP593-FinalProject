@@ -52,11 +52,11 @@ def main():
     
     # Download today's APOD
     image_url = download_apod_image(apod_info_dict)
-    image_msg = image_url
+    image_msg = download_apod_image
     h = hashlib.sha256(image_url.encode())
     image_sha256 = str(h.digest())
     image_path = get_image_path(image_url, image_dir_path)
-    image_size = os.path.getsize(image_path)
+    image_size = len(image_path)
   
 
     # Print APOD image information
@@ -203,8 +203,8 @@ def save_image_file(image_msg, image_path):
     :param image_path: Path to save image file
     :returns: None
     """
-
-    req = requests.get(image_msg, stream=True)
+    URL = image_msg
+    req = requests.get(URL, stream=True)
 
     if req.status_code == 200:
         print('Response:',req.status_code, '🎉🎉🎉', '\n')
