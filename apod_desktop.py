@@ -37,7 +37,7 @@ import requests
 
 def main():
 
-    # Determine the paths where files are stored
+     # Determine the paths where files are stored
     image_dir_path = get_image_dir_path()
     db_path = path.join(image_dir_path, 'apod_images.db')
 
@@ -51,34 +51,34 @@ def main():
     apod_info_dict = get_apod_info(apod_date)
     
     # Download today's APOD
-    image_url = download_apod_image(apod_info_dict['url'])
-    image_msg = download_apod_image(image_url)
+    image_url = download_apod_image(apod_info_dict)
+    image_msg = image_url
     h = hashlib.sha256(image_url.encode())
-    image_sha256 = str(h.digest())
+    image_sha256 = str((h.digest()))
     image_path = get_image_path(image_url, image_dir_path)
-    image_size = len(image_path)
-  
+    image_size = len(image_path) 
 
     # Print APOD image information
     print_apod_info(image_url, image_path, image_size, image_sha256)
 
     # Add image to cache if not already present
     if not image_already_in_db(db_path, image_sha256):
-        save_image_file(image_msg, image_path)
+        save_image_file(image_msg,image_path)
         add_image_to_db(db_path, image_path, image_size, image_sha256)
 
     # Set the desktop background image to the selected APOD
+    
     filename = image_url.split("/")[-1]
-    wallpaper = os.path.join(image_path,filename)
-    set_desktop_background_image(wallpaper)
+    background =os.path.join(image_path,filename)
+    set_desktop_background_image(background)
 
 def get_image_dir_path():
     """
     Validates the command line parameter that specifies the path
     in which all downloaded images are saved locally.
-
     :returns: Path of directory in which images are saved locally
     """
+    
     if len(argv) >= 2:
         dir_path = argv[1]
         if path.isdir(dir_path):
@@ -95,9 +95,9 @@ def get_apod_date():
     """
     Validates the command line parameter that specifies the APOD date.
     Aborts script execution if date format is invalid.
-
     :returns: APOD date as a string in 'YYYY-MM-DD' format
-    """    
+    """  
+    
     if len(argv) >= 3:
         # Date parameter has been provided, so get it
         apod_date = argv[2]
@@ -113,22 +113,24 @@ def get_apod_date():
         apod_date = date.today().isoformat()
     
     print("APOD date:", apod_date)
-    return apod_date
+    return (apod_date)
 
 def get_image_path(image_url, dir_path):
     """
     Determines the path at which an image downloaded from
     a specified URL is saved locally.
-
     :param image_url: URL of image
     :param dir_path: Path of directory in which image is saved locally
     :returns: Path at which image is saved locally
     """
+    url =image_url 
+    filename= url.split("/")[-1] 
     
-    filename = image_url.split("/")[-1]
-    full_path = os.path.join(dir_path, filename)
+    location =  dir_path 
+    
+    full_path= os.path.join(location,filename)
     print(full_path)
-    return full_path
+    return location
 
 def get_apod_info(date):
     """
@@ -179,48 +181,54 @@ def print_apod_info(image_url, image_path, image_size, image_sha256):
 def download_apod_image(image_url):
     """
     Downloads an image from a specified URL.
-
     :param image_url: URL of image
     :returns: Response message that contains image data
     """
- 
-    pic_info = requests.get(image_url)
-    if pic_info.status_code == 200: 
-        print('Response:',pic_info.status_code, '🎉🎉🎉', '\n')
-        print("Success connection")
-        return pic_info
-
+    image =(image_url['url']) 
+    
+    image_data = requests.get(image) 
+    
+   
+    if image_data.status_code == 200:
+        print('Response:',image_data.status_code, '🎉🎉🎉', '\n')
+        print("Connection Succesful")
+        return image
+       
+            
     else:
-        print('Failed to download APOD',pic_info.status_code)
+        print('Failed to download APOD',image_data.status_code)
         return None
-
+    
+    
 def save_image_file(image_msg, image_path):
     """
     Extracts an image file from an HTTP response message
     and saves the image file to disk.
-
     :param image_msg: HTTP response message
     :param image_path: Path to save image file
     :returns: None
     """
-    URL = image_msg
-    req = requests.get(URL, stream=True)
-
+    url =image_msg 
+    req=requests.get(url,stream = True) 
     if req.status_code == 200:
-        print('Response:', req.status_code, '🎉🎉🎉', '\n')
-        print("Save Succesfull")
+        print('Response:',req.status_code, '🎉🎉🎉', '\n')
+        print("Successfully saved")
              
     else:
-        print('Failed to download APOD',req.status_code)
-
-    get_filename = image_msg.split("/")[-1]
-    full_path = os.path.join(image_path,get_filename)
-    req.raw.decode_content = True
-    with open(full_path,'wb') as f:
+        print('Failed to save APOD',req.status_code)
+        
+    filename = url.split("/")[-1] 
+    req.raw.decode_content = True 
+    path = image_path 
+    complete = os.path.join(path,filename)
+        
+    
+    with open(complete,'wb') as f: 
         shutil.copyfileobj(req.raw, f)
+        
+    
     
     return None
-    
 
 def create_image_db(db_path):
     """
@@ -237,7 +245,7 @@ def create_image_db(db_path):
         cursor = db_path.cursor()
 
         cursor.execute("""CREATE TABLE 'NASA APOD'(
-            image path text,
+            image_path text,
             image_url text,
             image_size integer,
             image_sha256 text
@@ -260,7 +268,7 @@ def add_image_to_db(db_path, image_path, image_size, image_sha256):
 
     connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
-    cursor.execute("INSERT INTO 'NASA APOD' (image_path, image_url, image_size, image_sha256) VALUE (?,?,?,?"), (db_path, image_path, image_size, image_sha256)
+    cursor.execute("INSERT INTO 'NASA APOD'( image_path, image_url, image_size, image_sha256) VALUES ( ?,?,?,?)",(db_path, image_path, image_size, image_sha256))
     connection.commit()
     connection.close()
     return None
