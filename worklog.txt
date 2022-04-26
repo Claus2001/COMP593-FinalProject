@@ -20,3 +20,8 @@ I finished the set_desktop_background variable with help of lab 9
 i must be like two eeors away from being done 
 getting errors on get size even tho this should wokr https://stackoverflow.com/questions/2104080/how-do-i-check-file-size-in-python
 figured it out with len()
+
+
+
+Oh my god it worked, i had an old broken .db in my APOD dir so it wasnt overlapping
+Finally
