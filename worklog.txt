@@ -13,3 +13,7 @@ Came back to it, started running the script  for the first time and trouble shoo
 4/25/2022
 tired messing around havent gotten it yet
 using https://cp.elitegameservers.net/Login?ReturnUrl=%2fService%2fHome%2f11678 to make the path where the files reside
+4/27/2022
+working with same_image_file i was doing some reseach i became across this https://docs.python.org/3/library/shutil.html which shows shuttil.copyfileobj
+should be almost finished if i ever stop getting that error both recommendations that Jeremy gave me didnt work
+I finished the set_desktop_background variable with help of lab 9

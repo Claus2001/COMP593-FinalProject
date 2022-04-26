@@ -16,7 +16,8 @@ History:
   Date        Author    Description
   2022-03-11  J.Dalby   Initial creation
 """
-
+from pip._vendor import requests
+import shutil
 import sqlite3
 from sys import argv, exit
 from datetime import datetime, date
@@ -53,8 +54,9 @@ def main():
     image_msg = download_apod_image(image_url)
     h = hashlib.sha256(image_url.encode())
     image_sha256 = str(h.digest())
-    image_size = os.path.getsize(image_path)
     image_path = get_image_path(image_url, image_dir_path)
+    image_size = os.path.getsize(image_path)
+  
 
     # Print APOD image information
     print_apod_info(image_url, image_path, image_size, image_sha256)
@@ -65,8 +67,8 @@ def main():
         add_image_to_db(db_path, image_path, image_size, image_sha256)
 
     # Set the desktop background image to the selected APOD
-    get_filename = image_url.split("/")[-1]
-    wallpaper = os.path.join(image_path,get_filename)
+    filename = image_url.split("/")[-1]
+    wallpaper = os.path.join(image_path,filename)
     set_desktop_background_image(wallpaper)
 
 def get_image_dir_path():
@@ -122,11 +124,10 @@ def get_image_path(image_url, dir_path):
     :returns: Path at which image is saved locally
     """
     
-    get_filename = image_url.split("/")[-1]
-    location = dir_path
-    full_path = os.path.join(location,get_filename)
+    filename = image_url.split("/")[-1]
+    full_path = os.path.join(dir_path, filename)
     print(full_path)
-    return location
+    return full_path
 
 def get_apod_info(date):
     """
@@ -138,7 +139,7 @@ def get_apod_info(date):
     """    
     nasa_api = 'https://api.nasa.gov/planetary/apod?api_key='
     my_key = 'NQPZ8KD9a3Cx6p8cIKx8sQGwsh1v1x6F3h7MBAIc'
-    print("Getting APOD information... ")
+    print("Getting APOD Information... ")
 
     parameters = (nasa_api + my_key + "&date=" + date)
       
@@ -181,11 +182,12 @@ def download_apod_image(image_url):
     :param image_url: URL of image
     :returns: Response message that contains image data
     """
-    pic_info = requests.get(image_url)
+    picture = image_url['url']
+    pic_info = requests.get(picture)
     if pic_info.status_code == 200: 
         print('Response:',pic_info.status_code, '🎉🎉🎉', '\n')
         print("Success connection")
-        return pic_info
+        return picture
 
     else:
         print('Failed to download APOD',pic_info.status_code)
@@ -201,7 +203,7 @@ def save_image_file(image_msg, image_path):
     :returns: None
     """
 
-    req = requests.get(image_msg)
+    req = requests.get(image_msg, stream=True)
 
     if req.status_code == 200:
         print('Response:',req.status_code, '🎉🎉🎉', '\n')
@@ -211,9 +213,10 @@ def save_image_file(image_msg, image_path):
         print('Failed to download APOD',req.status_code)
 
     get_filename = image_msg.split("/")[-1]
-    location = image_path
-    full_path = os.path.join(location,get_filename)
-
+    full_path = os.path.join(image_path,get_filename)
+    req.raw.decode_content = True
+    with open(full_path,'wb') as f:
+        shutil.copyfileobj(req.raw, f)
     
 
     
@@ -227,19 +230,18 @@ def create_image_db(db_path):
     """
 
     file_path = db_path
-
     file_exist = exists(file_path)
     if file_exist == False:
         db_path = sqlite3.connect(file_path)
         cursor = db_path.cursor()
 
-        cursor.execute(""" CREATE TABLE "NASA APOD"(
+        cursor.execute("""CREATE TABLE "NASA APOD"(
             image path text,
             image_url text,
-            image_size integer
+            image_size integer,
             image_sha256 text
         )
-        """) 
+            """) 
         db_path.commit()
         db_path.close()
     
@@ -273,20 +275,21 @@ def image_already_in_db(db_path, image_sha256):
     """ 
     connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
-    cursor.execute("SELECT image_sha56 FROM 'NASA APOD'")
+    cursor.execute("SELECT 'image_sha256' FROM 'NASA APOD'")
     get_hash = cursor.fetchall()
+    cursor.close()
     if image_sha256 in get_hash:
         return True
     else: 
         return False
 
-def set_desktop_background_image(image_path):
+def set_desktop_background_image(wallpaper):
     """
     Changes the desktop wallpaper to a specific image.
 
     :param image_path: Path of image file
     :returns: None
     """
-
+    ctypes.windll.user32.SystemParametersInfoW(20,0,wallpaper,3)
 
 main()
