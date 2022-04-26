@@ -13,7 +13,9 @@ Came back to it, started running the script  for the first time and trouble shoo
 4/25/2022
 tired messing around havent gotten it yet
 using https://cp.elitegameservers.net/Login?ReturnUrl=%2fService%2fHome%2f11678 to make the path where the files reside
-4/27/2022
-working with same_image_file i was doing some reseach i became across this https://docs.python.org/3/library/shutil.html which shows shuttil.copyfileobj
+4/26/2022
+working with save_image_file i was doing some reseach i became across this https://docs.python.org/3/library/shutil.html which shows shuttil.copyfileobj
 should be almost finished if i ever stop getting that error both recommendations that Jeremy gave me didnt work
 I finished the set_desktop_background variable with help of lab 9
+i must be like two eeors away from being done 
+getting errors on get size even tho this should wokr https://stackoverflow.com/questions/2104080/how-do-i-check-file-size-in-python

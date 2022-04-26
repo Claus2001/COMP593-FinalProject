@@ -23,6 +23,7 @@ from sys import argv, exit
 from datetime import datetime, date
 from hashlib import sha256
 import os.path
+import os
 from os import path
 from os.path import exists
 import ctypes
@@ -50,7 +51,7 @@ def main():
     apod_info_dict = get_apod_info(apod_date)
     
     # Download today's APOD
-    image_url = download_apod_image(apod_info_dict['url'])
+    image_url = download_apod_image(apod_info_dict)
     image_msg = image_url
     h = hashlib.sha256(image_url.encode())
     image_sha256 = str(h.digest())
@@ -149,7 +150,7 @@ def get_apod_info(date):
         
         print('Response:',response.status_code, '🎉🎉🎉', '\n')
         print("Success APOD Obtained")
-        info =response.json()
+        info =response.json() 
         info_dict= dict(info)
         
         return info_dict
@@ -182,7 +183,7 @@ def download_apod_image(image_url):
     :param image_url: URL of image
     :returns: Response message that contains image data
     """
-    picture = image_url
+    picture = image_url['url']
     pic_info = requests.get(picture)
     if pic_info.status_code == 200: 
         print('Response:',pic_info.status_code, '🎉🎉🎉', '\n')
@@ -218,7 +219,7 @@ def save_image_file(image_msg, image_path):
     with open(full_path,'wb') as f:
         shutil.copyfileobj(req.raw, f)
     
-
+    return None
     
 
 def create_image_db(db_path):
@@ -244,7 +245,7 @@ def create_image_db(db_path):
             """) 
         db_path.commit()
         db_path.close()
-    
+    return None
 
 def add_image_to_db(db_path, image_path, image_size, image_sha256):
     """
@@ -262,7 +263,7 @@ def add_image_to_db(db_path, image_path, image_size, image_sha256):
     cursor.execute("INSERT INTO 'NASA APOD' (image_path, image_url, image_size, image_sha256) VALUE (?,?,?,?"), (db_path, image_path, image_size, image_sha256)
     connection.commit()
     connection.commit()
-
+    return None
 
 def image_already_in_db(db_path, image_sha256):
     """
@@ -291,5 +292,5 @@ def set_desktop_background_image(wallpaper):
     :returns: None
     """
     ctypes.windll.user32.SystemParametersInfoW(20,0,wallpaper,3)
-
+    return None
 main()
