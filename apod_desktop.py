@@ -51,8 +51,8 @@ def main():
     apod_info_dict = get_apod_info(apod_date)
     
     # Download today's APOD
-    image_url = download_apod_image(apod_info_dict)
-    image_msg = download_apod_image
+    image_url = download_apod_image(apod_info_dict['url'])
+    image_msg = download_apod_image(image_url)
     h = hashlib.sha256(image_url.encode())
     image_sha256 = str(h.digest())
     image_path = get_image_path(image_url, image_dir_path)
@@ -183,12 +183,12 @@ def download_apod_image(image_url):
     :param image_url: URL of image
     :returns: Response message that contains image data
     """
-    picture = image_url['url']
-    pic_info = requests.get(picture)
+ 
+    pic_info = requests.get(image_url)
     if pic_info.status_code == 200: 
         print('Response:',pic_info.status_code, '🎉🎉🎉', '\n')
         print("Success connection")
-        return picture
+        return pic_info
 
     else:
         print('Failed to download APOD',pic_info.status_code)
@@ -207,7 +207,7 @@ def save_image_file(image_msg, image_path):
     req = requests.get(URL, stream=True)
 
     if req.status_code == 200:
-        print('Response:',req.status_code, '🎉🎉🎉', '\n')
+        print('Response:', req.status_code, '🎉🎉🎉', '\n')
         print("Save Succesfull")
              
     else:
@@ -236,7 +236,7 @@ def create_image_db(db_path):
         db_path = sqlite3.connect(file_path)
         cursor = db_path.cursor()
 
-        cursor.execute("""CREATE TABLE "NASA APOD"(
+        cursor.execute("""CREATE TABLE 'NASA APOD'(
             image path text,
             image_url text,
             image_size integer,
@@ -262,7 +262,7 @@ def add_image_to_db(db_path, image_path, image_size, image_sha256):
     cursor = connection.cursor()
     cursor.execute("INSERT INTO 'NASA APOD' (image_path, image_url, image_size, image_sha256) VALUE (?,?,?,?"), (db_path, image_path, image_size, image_sha256)
     connection.commit()
-    connection.commit()
+    connection.close()
     return None
 
 def image_already_in_db(db_path, image_sha256):
