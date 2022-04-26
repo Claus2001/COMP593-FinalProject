@@ -15,6 +15,7 @@ Parameters:
 History:
   Date        Author    Description
   2022-03-11  J.Dalby   Initial creation
+  2022-04-26 C.de la Guardia Finished scipt
 """
 from pip._vendor import requests
 import shutil
@@ -175,7 +176,7 @@ def print_apod_info(image_url, image_path, image_size, image_sha256):
     """    
     print("The URL of the APOD is " + image_url)
     print("The full path of the APOD is " + image_path)
-    print("The APOD size is ", image_size, " KB" )
+    print("The APOD size is ", image_size, " KB." )
     print("The Hash for the file is ", image_sha256)
 
 def download_apod_image(image_url):
@@ -212,7 +213,7 @@ def save_image_file(image_msg, image_path):
     req=requests.get(url,stream = True) 
     if req.status_code == 200:
         print('Response:',req.status_code, '🎉🎉🎉', '\n')
-        print("Successfully saved")
+        print("Successfully saved.")
              
     else:
         print('Failed to save APOD',req.status_code)
@@ -300,5 +301,6 @@ def set_desktop_background_image(wallpaper):
     :returns: None
     """
     ctypes.windll.user32.SystemParametersInfoW(20,0,wallpaper,3)
+    print("Wallpaper has been set.")
     return None
 main()

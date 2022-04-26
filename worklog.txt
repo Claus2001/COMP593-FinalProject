@@ -20,7 +20,9 @@ I finished the set_desktop_background variable with help of lab 9
 i must be like two eeors away from being done 
 getting errors on get size even tho this should wokr https://stackoverflow.com/questions/2104080/how-do-i-check-file-size-in-python
 figured it out with len()
-
+https://stackoverflow.com/questions/60404388/how-to-format-filepath-to-raw-string-so-that-there-isnt-an-error-in-unzipping
+this helped with the save image file.
+I also learned that is u do stream = True it garantees no interuption while gathering information
 
 
 Oh my god it worked, i had an old broken .db in my APOD dir so it wasnt overlapping
