@@ -51,7 +51,7 @@ def main():
     
     # Download today's APOD
     image_url = download_apod_image(apod_info_dict['url'])
-    image_msg = download_apod_image(image_url)
+    image_msg = image_url
     h = hashlib.sha256(image_url.encode())
     image_sha256 = str(h.digest())
     image_path = get_image_path(image_url, image_dir_path)
@@ -182,7 +182,7 @@ def download_apod_image(image_url):
     :param image_url: URL of image
     :returns: Response message that contains image data
     """
-    picture = image_url['url']
+    picture = image_url
     pic_info = requests.get(picture)
     if pic_info.status_code == 200: 
         print('Response:',pic_info.status_code, '🎉🎉🎉', '\n')
