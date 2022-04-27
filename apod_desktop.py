@@ -185,19 +185,19 @@ def download_apod_image(image_url):
     :param image_url: URL of image
     :returns: Response message that contains image data
     """
-    image =(image_url['url']) 
+    pic =(image_url['url']) 
     
-    image_data = requests.get(image) 
+    pic_info = requests.get(pic) 
     
    
-    if image_data.status_code == 200:
-        print('Response:',image_data.status_code, '🎉🎉🎉', '\n')
+    if pic_info.status_code == 200:
+        print('Response:',pic_info.status_code, '🎉🎉🎉', '\n')
         print("Connection Succesful")
-        return image
+        return pic
        
             
     else:
-        print('Failed to download APOD',image_data.status_code)
+        print('Failed to download APOD',pic_info.status_code)
         return None
     
     
